@@ -27,9 +27,12 @@ public class Passenger {
 	public void setGender(char gender) {
 		this.gender = gender;
 	}
+	
+	
 	public String toString(){
 		return "Name: " + this.firstName + " " + this.lastName + "\nSex: " + this.gender;
 	}
+
 	
 	
 	

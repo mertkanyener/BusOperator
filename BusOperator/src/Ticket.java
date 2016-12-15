@@ -1,15 +1,19 @@
 
 public class Ticket {
-	private int ticketNo;
+	private int ticketNo, seatNo;
+	private Bus bus;
 	private Passenger passenger;
-	private Seat seat;
 	private Baggage baggage;
 	
-	public Ticket(int ticketNo, Passenger passenger , Seat seat, Baggage baggage){
+	
+	public Ticket(int ticketNo, Bus bus, Passenger passenger, int seatNo, Baggage baggage){
 		this.setTicketNo(ticketNo);
+		this.setBus(bus);
 		this.setPassenger(passenger);
-		this.setSeat(seat);
+		this.setSeatNo(seatNo);
 		this.setBaggage(baggage);
+	
+		
 	}
 	
 	public int getTicketNo() {
@@ -18,29 +22,46 @@ public class Ticket {
 	public void setTicketNo(int ticketNo) {
 		this.ticketNo = ticketNo;
 	}
-
-	public Seat getSeat() {
-		return seat;
-	}
-	public void setSeat(Seat seat) {
-		this.seat = seat;
-	}
+	
 	public Baggage getBaggage(){
 		return this.baggage;
 	}
 	public void setBaggage(Baggage baggage){
 		this.baggage = baggage;
 	}
+
+	public int getSeatNo() {
+		return seatNo;
+	}
+
+	public void setSeatNo(int seatNo) {
+		this.seatNo = seatNo;
+	}
+	
+	public Bus getBus() {
+		return bus;
+	}
+
+	public void setBus(Bus bus) {
+		this.bus = bus;
+	}
+	
 	public Passenger getPassenger(){
 		return passenger;
 	}
+	
 	public void setPassenger(Passenger passenger){
 		this.passenger = passenger;
 	}
-	
 	public String toString(){
-		return "Ticket no: " + this.ticketNo + "\n:Owner First Name: " + this.passenger.getFirstName() + "\nOwner Last Name: " + this.passenger.getLastName() + "\nSeat: " + this.seat; 
+		return "Ticket no: " + this.ticketNo + "\nBus: " + this.bus + "\nPassenger information:\nFirst Name: " + this.passenger.getFirstName() +
+				"\nLast Name: " + this.passenger.getLastName() + "\nBaggage information:\n" + this.baggage;
 	}
+
+	
+
+
+	
 	
 	
 	

@@ -1,13 +1,18 @@
 
+
 public class Bus {
+	
 	private Route route;
 	private String plateNum;
-	private int[] seats;
-	public Bus(Route route, String plateNum, int[] seats){
+	private Passenger[] passengers;
+	private float baggageWeightCap;
+	
+	public Bus(Route route, String plateNum, Passenger[] passengers, float baggageWeightCap){
 		this.setRoute(route);
 		this.setPlateNum(plateNum);
-		this.setSeats(seats);
-	 
+		this.setPassengers(passengers);
+		this.setBaggageWeightCap(baggageWeightCap);
+	
 	}
 	
 	public Route getRoute() {
@@ -22,19 +27,31 @@ public class Bus {
 	public void setPlateNum(String plateNum) {
 		this.plateNum = plateNum;
 	}
-	
-	public int[] getSeats() {
-		return seats;
+	public Passenger[] getPassengers() {
+		return passengers;
 	}
 
-	public void setSeats(int[] seats) {
-		this.seats = seats;
+	public void setPassengers(Passenger[] passengers) {
+		this.passengers = passengers;
 	}
-	
+
+	public float getBaggageWeightCap() {
+		return baggageWeightCap;
+	}
+
+	public void setBaggageWeightCap(float baggageWeightCap) {
+		this.baggageWeightCap = baggageWeightCap;
+	}
+
 	public String toString(){
-		return "Bus: " + plateNum + "\nSeats: " + seats.length + "\nRoute:\n" + route; 
+		return "Plate: " + this.plateNum + "\nRoute: " + this.route;
 	}
+
+
+
 	
+
+
 	
 	
 
