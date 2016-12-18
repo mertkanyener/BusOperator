@@ -8,11 +8,12 @@ public class Operator {
 	private int busCounter = 0;
 	private int ticketNoCounter = 1000;
 	private int baggageNoCounter = 100;
+	private int ticketCounter = 0;
 	
 	
 	
 	public void addBus(String plateNum, String depHour, String depMinute, String arrHour, String arrMinute, String depStation, String depCity,
-			String arrStation, String arrCity, int seatCap, float baggageWeightCap){
+			String arrStation, String arrCity, int seatCap, double baggageWeightCap){
 			
 			Time depTime = new Time(depHour, depMinute);
 			Time arrTime = new Time(arrHour, arrMinute);
@@ -24,75 +25,84 @@ public class Operator {
 			busCounter += 1;
 	}
 	
-	public String addTicket(Bus bus, int seatNo, String firstName, String lastName, char gender, float weight){
+	public void addTicket(Bus bus, int seatNo, String firstName, String lastName, char gender, double weight){
 		
-		if(gender != 'M' || gender != 'F'){
-			return "Gender";
-		}
-		else if((seatNo - 1) > bus.getPassengers().length || seatNo < 1 ){
-			return "Seat Number";
-		}
-		else if(weight > bus.getBaggageWeightCap()){
-			return "Weight";
-		}
-		else{
-			
-			Passenger passenger = new Passenger(firstName, lastName, gender);
-			Baggage baggage = new Baggage(baggageNoCounter, weight);
-			Ticket ticket = new Ticket(ticketNoCounter, bus, passenger, seatNo, baggage);
-			allTickets[ticketNoCounter] = ticket;
-			Passenger[] p = bus.getPassengers();
-			p[seatNo - 1] = passenger;
+		Passenger passenger = new Passenger(firstName, lastName, gender);
+		Baggage baggage = new Baggage(baggageNoCounter, weight);
+		Ticket ticket = new Ticket(ticketNoCounter, bus, passenger, seatNo, baggage);
+		allTickets[ticketCounter] = ticket;
+		Passenger[] p = bus.getPassengers();
+		p[seatNo - 1] = passenger;
+	
 		
-			baggageNoCounter += 1;
-			ticketNoCounter += 1;
-			
-			return "Success";
-		}
-		
+		baggageNoCounter += 1;
+		ticketNoCounter += 1;
+		ticketCounter += 1;
+	
 	}
 	
-	public String exchangeTicket(Ticket t1, Ticket t2){
+	public void exchangeTicket(Ticket t1, Ticket t2){
 		
-		if(t1.getBaggage().getWeight() > t2.getBus().getBaggageWeightCap() || t2.getBaggage().getWeight() > t1.getBus().getBaggageWeightCap()){
-			return "Weight";
-		}
-		else if(t1.getPassenger().getGender() != getAdjacentGender(t2) || t2.getPassenger().getGender() != getAdjacentGender(t1)){
-			return "Gender";
-		}
-		else{
-			Ticket temp1 = t1;
-			
-			t1.setSeatNo(t2.getSeatNo());
-			t1.setBus(t2.getBus());
-			t1.setPassenger(t2.getPassenger());
-			t1.setBaggage(t2.getBaggage());
-			Passenger[] p1 = t1.getBus().getPassengers();
-			p1[t1.getSeatNo() - 1] = t1.getPassenger();
-			
-			t2.setSeatNo(temp1.getSeatNo());
-			t2.setBus(temp1.getBus());
-			t2.setPassenger(temp1.getPassenger());
-			t2.setBaggage(temp1.getBaggage());
-			Passenger[] p2 = t2.getBus().getPassengers();
-			p2[t2.getSeatNo() - 1] = t2.getPassenger();
-			
-			return "Success";
-			
-		}
+		Bus b1 = t2.getBus();
+		Bus b2 = t1.getBus();
+		Passenger p1 = t2.getPassenger();
+		Passenger p2 = t1.getPassenger();
+		Baggage bag1 = t2.getBaggage();
+		Baggage bag2 = t1.getBaggage();
+	
+		
+		t1.setBus(b1);
+		t1.setPassenger(p1);
+		t1.setBaggage(bag1);
+		t1.getBus().getPassengers()[t1.getSeatNo() - 1] = p1;
+		
+		t2.setBus(b2);
+		t2.setPassenger(p2);
+		t2.setBaggage(bag2);
+		t2.getBus().getPassengers()[t2.getSeatNo() - 1] = p2;
 		
 		
 		
 	}
 	
+	public Ticket getTicket(int ticketNo){
+		Ticket t = null;
+		for(int i = 0; i < allTickets.length; i++){
+			if(allTickets[i].getTicketNo() == ticketNo){
+				t = allTickets[i];
+				break;
+			}
+		}
+		return t;
+	}
+	
+	public String removeTicket(int ticketNo){
+		String result = null;
+		for(int i = 0; i < allTickets.length; i++){
+			if(allTickets[i].getTicketNo() == ticketNo){
+				allTickets[i].getBus().getPassengers()[allTickets[i].getSeatNo() - 1] = null;
+				allTickets[i] = null;
+				result = "Success";
+				break;
+			}
+			else{
+				result = "Fail";
+			}
+		}
+		return result;
+	}
+	
+	
+	
+	//Returns the gender of the passenger adjacent to the t1's owner
 	public char getAdjacentGender(Ticket t1){
 		Passenger[] p1 = t1.getBus().getPassengers();
 		
 		if((t1.getTicketNo() % 2) == 0){
-			return p1[t1.getTicketNo() - 1].getGender();
+			return p1[t1.getSeatNo() - 2].getGender();
 		}
 		else{
-			return p1[t1.getTicketNo() + 1].getGender();
+			return p1[t1.getSeatNo()].getGender();
 		}
 		
 	}

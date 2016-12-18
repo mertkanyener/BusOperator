@@ -6,15 +6,19 @@ public class Ticket {
 	private Baggage baggage;
 	
 	
+	
 	public Ticket(int ticketNo, Bus bus, Passenger passenger, int seatNo, Baggage baggage){
 		this.setTicketNo(ticketNo);
 		this.setBus(bus);
 		this.setPassenger(passenger);
 		this.setSeatNo(seatNo);
 		this.setBaggage(baggage);
-	
 		
 	}
+	
+	public Ticket(){
+		
+	};
 	
 	public int getTicketNo() {
 		return ticketNo;
@@ -49,6 +53,8 @@ public class Ticket {
 	public Passenger getPassenger(){
 		return passenger;
 	}
+	
+	
 	
 	public void setPassenger(Passenger passenger){
 		this.passenger = passenger;

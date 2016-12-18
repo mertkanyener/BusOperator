@@ -5,9 +5,9 @@ public class Bus {
 	private Route route;
 	private String plateNum;
 	private Passenger[] passengers;
-	private float baggageWeightCap;
+	private double baggageWeightCap;
 	
-	public Bus(Route route, String plateNum, Passenger[] passengers, float baggageWeightCap){
+	public Bus(Route route, String plateNum, Passenger[] passengers, double baggageWeightCap){
 		this.setRoute(route);
 		this.setPlateNum(plateNum);
 		this.setPassengers(passengers);
@@ -35,11 +35,11 @@ public class Bus {
 		this.passengers = passengers;
 	}
 
-	public float getBaggageWeightCap() {
+	public double getBaggageWeightCap() {
 		return baggageWeightCap;
 	}
 
-	public void setBaggageWeightCap(float baggageWeightCap) {
+	public void setBaggageWeightCap(double baggageWeightCap) {
 		this.baggageWeightCap = baggageWeightCap;
 	}
 

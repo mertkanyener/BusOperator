@@ -1,9 +1,9 @@
 
 public class Baggage {
 	private int baggageNo;
-	private float weight;
+	private double weight;
 	
-	public Baggage(int baggageNo, float weight){
+	public Baggage(int baggageNo, double weight){
 		this.setBaggageNo(baggageNo);
 		this.setWeight(weight);
 
@@ -17,11 +17,11 @@ public class Baggage {
 		this.baggageNo = baggageNo;
 	}
 
-	public float getWeight() {
+	public double getWeight() {
 		return weight;
 	}
 
-	public void setWeight(float weight) {
+	public void setWeight(double weight) {
 		this.weight = weight;
 	}
 	
