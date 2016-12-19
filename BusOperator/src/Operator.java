@@ -2,7 +2,7 @@
 
 public class Operator {
 	
-	private Bus[] allBuses = new Bus[10];
+	private Bus[] allBuses = new Bus[30];
 	private Passenger[] allPassengers;
 	private Ticket[] allTickets = new Ticket[1000];
 	private int busCounter = 0;
@@ -13,7 +13,7 @@ public class Operator {
 	
 	
 	public void addBus(String plateNum, String depHour, String depMinute, String arrHour, String arrMinute, String depStation, String depCity,
-			String arrStation, String arrCity, int seatCap, double baggageWeightCap){
+			String arrStation, String arrCity, int seatCap, int baggageWeightCap){
 			
 			Time depTime = new Time(depHour, depMinute);
 			Time arrTime = new Time(arrHour, arrMinute);
@@ -39,6 +39,15 @@ public class Operator {
 		ticketNoCounter += 1;
 		ticketCounter += 1;
 	
+	}
+	
+	public boolean checkSeat(Bus b, int n){
+		if(!b.getPassengers()[n - 1].equals(null)){
+			return false;
+		}
+		else{
+			return true;
+		}
 	}
 	
 	public void exchangeTicket(Ticket t1, Ticket t2){
@@ -76,35 +85,34 @@ public class Operator {
 		return t;
 	}
 	
-	public String removeTicket(int ticketNo){
-		String result = null;
+	public void removeTicket(int ticketNo){
 		for(int i = 0; i < allTickets.length; i++){
 			if(allTickets[i].getTicketNo() == ticketNo){
 				allTickets[i].getBus().getPassengers()[allTickets[i].getSeatNo() - 1] = null;
-				allTickets[i] = null;
-				result = "Success";
+				Ticket[] copy = new Ticket[allTickets.length - 1];
+				System.arraycopy(allTickets, 0, copy, 0, i);
+				System.arraycopy(allTickets, i+1, copy, i, allTickets.length-i-1);
+				allTickets = copy;
+				ticketCounter -= 1;
 				break;
 			}
-			else{
-				result = "Fail";
-			}
 		}
-		return result;
+		
+			
 	}
 	
 	
 	
-	//Returns the gender of the passenger adjacent to the t1's owner
-	public char getAdjacentGender(Ticket t1){
-		Passenger[] p1 = t1.getBus().getPassengers();
-		
-		if((t1.getTicketNo() % 2) == 0){
-			return p1[t1.getSeatNo() - 2].getGender();
+	
+	
+	public Bus findBus(String plateNo){
+		Bus b = null;
+		for(int i = 0; i < busCounter; i++){
+			if(allBuses[i].getPlateNum().equals(plateNo)){
+				b = allBuses[i];
+			}
 		}
-		else{
-			return p1[t1.getSeatNo()].getGender();
-		}
-		
+		return b;
 	}
 	
 	
@@ -158,6 +166,12 @@ public class Operator {
 		this.baggageNoCounter = baggageNoCounter;
 	}
 	
+	public int getTicketCounter(){
+		return ticketCounter;
+	}
 	
+	public void setTicketCounter(int ticketCounter){
+		this.ticketCounter = ticketCounter;
+	}
 
 }
