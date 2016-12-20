@@ -50,7 +50,7 @@ public class OperatorTests {
 		assertEquals("Alpay", ticket1.getPassenger().getFirstName());
 		assertEquals("Özilban", ticket1.getPassenger().getLastName());
 		assertEquals("Mertkan", ticket2.getPassenger().getFirstName());
-		assertEquals(b1, ticket2.getBus());
+		
 		
 		
 	}
@@ -82,6 +82,18 @@ public class OperatorTests {
 		o.addBus("34 ABC 12", "15", "30", "00", "15", "City A Main Station", "City B" , "City C Main Station", "City C", 40, 45);
 		Bus b = o.findBus("34 ABC 12");
 		assertEquals(b, o.getAllBuses()[1]);
+		
+	}
+	
+	@Test
+	public void testCheckSeat(){
+		Operator o = new Operator();
+		o.addBus("34 HG 4678", "20", "30", "01", "45", "City A Main Station", "City A", "City B Main Station", "City B", 36, 40);
+		o.addTicket(o.getAllBuses()[0], 12, "John", "Smith", 'M', 32.4);
+		boolean b1 = o.checkSeat(o.getAllBuses()[0], 12);
+		boolean b2 = o.checkSeat(o.getAllBuses()[0], 11);
+		assertEquals(false, b1);
+		assertEquals(true, b2);
 		
 	}
 

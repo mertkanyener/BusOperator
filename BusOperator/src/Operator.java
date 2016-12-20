@@ -3,7 +3,6 @@
 public class Operator {
 	
 	private Bus[] allBuses = new Bus[30];
-	private Passenger[] allPassengers;
 	private Ticket[] allTickets = new Ticket[1000];
 	private int busCounter = 0;
 	private int ticketNoCounter = 1000;
@@ -11,7 +10,7 @@ public class Operator {
 	private int ticketCounter = 0;
 	
 	
-	
+	// Adds a new Bus object to allBuses
 	public void addBus(String plateNum, String depHour, String depMinute, String arrHour, String arrMinute, String depStation, String depCity,
 			String arrStation, String arrCity, int seatCap, int baggageWeightCap){
 			
@@ -24,7 +23,8 @@ public class Operator {
 			allBuses[busCounter] = newBus;
 			busCounter += 1;
 	}
-	
+
+	// Adds a new Ticket object to allBuses
 	public void addTicket(Bus bus, int seatNo, String firstName, String lastName, char gender, double weight){
 		
 		Passenger passenger = new Passenger(firstName, lastName, gender);
@@ -41,8 +41,10 @@ public class Operator {
 	
 	}
 	
+	//Checks if seat with number n in bus b is empty
+	//Returns true if it's empty, false otherwise
 	public boolean checkSeat(Bus b, int n){
-		if(!b.getPassengers()[n - 1].equals(null)){
+		if(b.getPassengers()[n - 1] != null){
 			return false;
 		}
 		else{
@@ -51,21 +53,20 @@ public class Operator {
 	}
 	
 	public void exchangeTicket(Ticket t1, Ticket t2){
-		
-		Bus b1 = t2.getBus();
-		Bus b2 = t1.getBus();
+	
+		int no1 = t1.getTicketNo();
+		int no2 = t2.getTicketNo();
 		Passenger p1 = t2.getPassenger();
 		Passenger p2 = t1.getPassenger();
 		Baggage bag1 = t2.getBaggage();
 		Baggage bag2 = t1.getBaggage();
 	
-		
-		t1.setBus(b1);
+		t1.setTicketNo(no2);
 		t1.setPassenger(p1);
 		t1.setBaggage(bag1);
 		t1.getBus().getPassengers()[t1.getSeatNo() - 1] = p1;
-		
-		t2.setBus(b2);
+
+		t2.setTicketNo(no1);
 		t2.setPassenger(p2);
 		t2.setBaggage(bag2);
 		t2.getBus().getPassengers()[t2.getSeatNo() - 1] = p2;
@@ -77,7 +78,10 @@ public class Operator {
 	public Ticket getTicket(int ticketNo){
 		Ticket t = null;
 		for(int i = 0; i < allTickets.length; i++){
-			if(allTickets[i].getTicketNo() == ticketNo){
+		    if(allTickets[i] == null){
+		    	continue;
+		    }
+			else if(allTickets[i].getTicketNo() == ticketNo){
 				t = allTickets[i];
 				break;
 			}
@@ -105,6 +109,8 @@ public class Operator {
 	
 	
 	
+	
+	
 	public Bus findBus(String plateNo){
 		Bus b = null;
 		for(int i = 0; i < busCounter; i++){
@@ -123,12 +129,7 @@ public class Operator {
 	public void setAllBuses(Bus[] allBuses) {
 		this.allBuses = allBuses;
 	}
-	public Passenger[] getAllPassengers() {
-		return allPassengers;
-	}
-	public void setAllPassengers(Passenger[] allPassengers) {
-		this.allPassengers = allPassengers;
-	}
+	
 	public Ticket[] getAllTickets() {
 		return allTickets;
 	}

@@ -10,6 +10,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.text.NumberFormatter;
 
 import java.awt.BorderLayout;
@@ -17,6 +19,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
@@ -24,7 +28,6 @@ import java.text.NumberFormat;
 public class GUI extends JFrame{
 	
 	private Operator operator = new Operator();
-	private Bus selectedBus;
 	private JLabel lblBusOperator;
 	private JButton btnAddBus, btnAddTicket, btnExchangeTicket, btnWithdrawTicket, btnShowBuses;
 	private JButton btnShowTickets;
@@ -39,6 +42,9 @@ public class GUI extends JFrame{
 		getContentPane().setLayout(null);
 		
 		
+		//For testing
+		
+		addTestItems();
 		
 		lblBusOperator = new JLabel("Bus Operator");
 		lblBusOperator.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -47,7 +53,7 @@ public class GUI extends JFrame{
 		getContentPane().add(lblBusOperator);
 		
 		btnAddBus = new JButton("Add Bus");
-		btnAddBus.setBounds(35, 102, 109, 23);
+		btnAddBus.setBounds(26, 102, 109, 23);
 		getContentPane().add(btnAddBus);
 		btnAddBus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -56,7 +62,7 @@ public class GUI extends JFrame{
 		});
 		
 		btnAddTicket = new JButton("Add Ticket");
-		btnAddTicket.setBounds(35, 211, 99, 23);
+		btnAddTicket.setBounds(26, 342, 99, 23);
 		btnAddTicket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				new AddTicket();
@@ -70,7 +76,7 @@ public class GUI extends JFrame{
 				new ExchangeTicket();
 			}
 		});
-		btnExchangeTicket.setBounds(176, 210, 137, 25);
+		btnExchangeTicket.setBounds(176, 341, 137, 25);
 		getContentPane().add(btnExchangeTicket);
 		
 		btnWithdrawTicket = new JButton("Withdraw Ticket");
@@ -97,11 +103,11 @@ public class GUI extends JFrame{
 				
 			}
 		});
-		btnWithdrawTicket.setBounds(176, 259, 137, 23);
+		btnWithdrawTicket.setBounds(176, 386, 137, 23);
 		getContentPane().add(btnWithdrawTicket);
 		
 		btnShowBuses = new JButton("Show Buses");
-		btnShowBuses.setBounds(176, 102, 122, 23);
+		btnShowBuses.setBounds(145, 102, 122, 23);
 		btnShowBuses.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				new ShowBuses();
@@ -116,30 +122,110 @@ public class GUI extends JFrame{
 				
 			}
 		});
-		btnShowTickets.setBounds(27, 259, 117, 23);
+		btnShowTickets.setBounds(26, 386, 117, 23);
 		getContentPane().add(btnShowTickets);
 		
 		lblTicketOperations = new JLabel("Ticket Operations");
 		lblTicketOperations.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblTicketOperations.setBounds(35, 165, 122, 25);
+		lblTicketOperations.setBounds(22, 274, 122, 25);
 		getContentPane().add(lblTicketOperations);
 		
 		lblNewLabel_1 = new JLabel("Bus Operations");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1.setBounds(34, 49, 154, 25);
+		lblNewLabel_1.setBounds(26, 49, 154, 25);
 		getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Please Choose the Bus to Show its Passenger List:");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel_2.setBounds(26, 168, 340, 25);
+		getContentPane().add(lblNewLabel_2);
 		
 		int n = operator.getBusCounter();
 		String[] str = new String[n];
 		for(int i = 0; i < n; i++){
 			str[i] = operator.getAllBuses()[i].getPlateNum();
 		}
+		
+		JComboBox cBoxBus = new JComboBox();
+		cBoxBus.setModel(new DefaultComboBoxModel(str));
+		cBoxBus.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				int n = operator.getBusCounter();
+				String[] str = new String[n];
+				for(int i = 0; i < n; i++){
+					str[i] = operator.getAllBuses()[i].getPlateNum();
+				}
+				cBoxBus.setModel(new DefaultComboBoxModel(str));
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		cBoxBus.setBounds(26, 224, 91, 20);
+		getContentPane().add(cBoxBus);
+		
+		JButton btnShowPassengers = new JButton("Show Passengers");
+		btnShowPassengers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try{
+					String s = (String)cBoxBus.getSelectedItem();
+					new ShowPassengers(operator.findBus(s));
+				}catch(NullPointerException e){
+					JOptionPane.showMessageDialog(null, "There is no bus selected!",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		btnShowPassengers.setBounds(145, 223, 122, 23);
+		getContentPane().add(btnShowPassengers);
+		
+		
 	
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		setTitle("Bus Operator");
 		setSize(500,500);
+		setResizable(false);
 		
+	}
+	
+	//Adds some items to run some tests on them
+	public void addTestItems(){
+		operator.addBus("34 HG 4678", "20", "30", "01", "45", "City A Main Station", "City A", "City B Main Station", "City B", 36, 40);
+		operator.addBus("34 ABC 12", "15", "30", "00", "15", "City A Main Station", "City B" , "City C Main Station", "City C", 40, 45);
+		
+		operator.addTicket(operator.getAllBuses()[0], 12, "John", "Smith", 'M', 12.4);
+		operator.addTicket(operator.getAllBuses()[0], 1, "Mary", "Jane", 'F', 25.2);
+		operator.addTicket(operator.getAllBuses()[0], 22, "Alpay", "Özilban", 'M', 15.0);
+		operator.addTicket(operator.getAllBuses()[1], 12, "Ýdil", "Cihangir", 'F', 11.0);
+		operator.addTicket(operator.getAllBuses()[1], 30, "Mertkan", "Yener", 'M', 22.0);
+		operator.addTicket(operator.getAllBuses()[1], 10, "Saim", "Karaer", 'M', 26.7);
 	}
 	
 	public static void main(String[] args){
@@ -148,6 +234,51 @@ public class GUI extends JFrame{
 	}
 	
 	
+	private class ShowPassengers extends JFrame{ 
+		
+		public ShowPassengers(Bus b){
+			
+			String[] columnNames = {"Seat No",
+									"First Name",
+									"Last Name",
+									"Gender",
+			};
+			
+			int n = b.getPassengers().length;
+			Object[][] data = new Object[n][4];
+			
+			for(int i = 0; i < n; i++){
+				if(operator.checkSeat(b, i + 1)){
+					Object[] arr = {i + 1, "N/A", "N/A", "N/A"};
+					data[i] = arr;
+				}
+				else{
+					Object[] arr = {i + 1, b.getPassengers()[i].getFirstName(), b.getPassengers()[i].getLastName(), b.getPassengers()[i].getGender()};
+					data[i] = arr;
+				}
+			}
+			
+			TableModel model = new DefaultTableModel(data,columnNames){
+				public boolean isCellEditable(int row, int column){
+					return false;
+				}
+			};
+			
+			JTable table = new JTable(model);
+			JScrollPane scrollPane = new JScrollPane(table);
+			table.setFillsViewportHeight(true);
+		
+			getContentPane().add(scrollPane, BorderLayout.CENTER);
+			setVisible(true);
+			setTitle("Passenger List");
+			setSize(700, 700);
+			setResizable(false);
+			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			
+			
+		}
+		
+	}
 	
 	private class ShowBuses extends JFrame{
 		
@@ -181,7 +312,13 @@ public class GUI extends JFrame{
 				
 			}
 			
-			JTable table = new JTable(data, columnNames);
+			TableModel model = new DefaultTableModel(data,columnNames){
+				public boolean isCellEditable(int row, int column){
+					return false;
+				}
+			};
+			
+			JTable table = new JTable(model);
 			JScrollPane scrollPane = new JScrollPane(table);
 			table.setFillsViewportHeight(true);
 		
@@ -189,6 +326,7 @@ public class GUI extends JFrame{
 			setVisible(true);
 			setTitle("All Buses");
 			setSize(700, 700);
+			setResizable(false);
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			
 			
@@ -224,14 +362,23 @@ public class GUI extends JFrame{
 				data[i] = arr;
 			}
 			
-			JTable table = new JTable(data, columnNames);
+			
+			TableModel model = new DefaultTableModel(data,columnNames){
+				public boolean isCellEditable(int row, int column){
+					return false;
+				}
+			};
+			
+			JTable table = new JTable(model);
 			JScrollPane scrollPane = new JScrollPane(table);
 			table.setFillsViewportHeight(true);
+			
 		
 			getContentPane().add(scrollPane, BorderLayout.CENTER);
 			setVisible(true);
 			setTitle("All Tickets");
 			setSize(700, 700);
+			setResizable(false);
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		}
 	}
@@ -433,6 +580,7 @@ public class GUI extends JFrame{
 			setVisible(true);
 			setTitle("Add New Bus");
 			setSize(500,500);
+			setResizable(false);
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		}
 
@@ -572,6 +720,7 @@ public class GUI extends JFrame{
 			getContentPane().add(btnAdd);
 			setVisible(true);
 			setSize(500,500);
+			setResizable(false);
 			setTitle("Add a new ticket");
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			
@@ -637,7 +786,7 @@ public class GUI extends JFrame{
 						int t1 = (int)txtTicketOne.getValue();
 						int t2 = (int)txtTicketTwo.getValue();
 						
-						if(operator.getTicket(t1).equals(null) || operator.getTicket(t2).equals(null)){
+						if(operator.getTicket(t1) == null || operator.getTicket(t2) == null){
 							JOptionPane.showMessageDialog(null, "You entered an invalid ticket number.",
 									"Error",
 									JOptionPane.ERROR_MESSAGE);
@@ -663,18 +812,10 @@ public class GUI extends JFrame{
 			btnExchange.setBounds(151, 131, 89, 23);
 			getContentPane().add(btnExchange);
 			setVisible(true);
+			setSize(400,250);
+			setResizable(false);
 			setTitle("Exchange Tickets");
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		}
 	}
-
-
-
-
-
-	
-
-
-
-	
 }
